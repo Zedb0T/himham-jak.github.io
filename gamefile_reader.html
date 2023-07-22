@@ -584,6 +584,8 @@ async function load_gamefile() {
 							othersel.classList.remove("file-item-selected");
 						}
 						fileelem.classList.add("file-item-selected");
+						console.log(part_blob)
+						console.log(infile.name)
 						set_sbv2(part_blob, infile.name);
 
 					} else if(part_header[0] == 0x56 && part_header[1] == 0x41 && part_header[2] == 0x47 && part_header[3] == 0x70) {
