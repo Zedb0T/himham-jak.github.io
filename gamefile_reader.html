@@ -541,6 +541,7 @@ async function load_gamefile() {
 							}
 							fileelem.classList.add("file-item-selected");
 							set_sblk2(part_blob);
+							
 						});
 
 						for(let othersel of document.querySelectorAll(".file-item-selected")) {
@@ -548,6 +549,7 @@ async function load_gamefile() {
 						}
 						fileelem.classList.add("file-item-selected");
 						set_sblk2(part_blob);
+						
 
 					} else if(infile_array[0x818] == 0x53 && infile_array[0x819] == 0x42 && infile_array[0x81A] == 0x6C && infile_array[0x81B] == 0x6B) {
 						fileelem.textContent = index_string+"Jak 1: " + infile.name + " (" + (infile_array[0x82E] + (infile_array[0x82F] * 256)) + " sounds)";
@@ -559,6 +561,65 @@ async function load_gamefile() {
 							}
 							fileelem.classList.add("file-item-selected");
 							set_sblk1(part_blob);
+						
+						});
+
+						for(let othersel of document.querySelectorAll(".file-item-selected")) {
+							othersel.classList.remove("file-item-selected");
+						}
+						fileelem.classList.add("file-item-selected");
+						set_sblk1(part_blob);
+					
+
+					} else if(part_header[32] == 0x53 && part_header[33] == 0x42 && part_header[34] == 0x76 && part_header[35] == 0x32) {
+						fileelem.textContent = index_string+"Music File: \"" + [...part_header.slice(44,48)].map((cc)=>{return String.fromCharCode(cc);}).join("") + "\" from " + infile.name;
+						let part_blob = infile.slice(this_sectors[i]*2048, (this_sectors[i]+this_sizes[i])*2048);
+						fileelem.classList.add("file-item");
+						fileelem.addEventListener("click", (e) => {
+							for(let othersel of document.querySelectorAll(".file-item-selected")) {
+								othersel.classList.remove("file-item-selected");
+							}
+							fileelem.classList.add("file-item-selected");
+							set_sbv2(part_blob, infile.name);
+							do_log("Using demo sectors");
+						});
+
+						
+						for(let othersel of document.querySelectorAll(".file-item-selected")) {
+							othersel.classList.remove("file-item-selected");
+						}
+						fileelem.classList.add("file-item-selected");
+					if(part_header[24] == 0x53 && part_header[25] == 0x42 && part_header[26] == 0x6C && part_header[27] == 0x6B) {
+						fileelem.textContent = index_string+"Jak II: " + infile.name + " (" + (part_header[0x2e] + (part_header[0x2f] * 256)) + " sounds)";
+						let part_blob = infile.slice(this_sectors[i]*2048, (this_sectors[i]+this_sizes[i])*2048);
+						fileelem.classList.add("file-item");
+						fileelem.addEventListener("click", (e) => {
+							for(let othersel of document.querySelectorAll(".file-item-selected")) {
+								othersel.classList.remove("file-item-selected");
+							}
+							fileelem.classList.add("file-item-selected");
+							set_sblk2(part_blob);
+							
+						});
+
+						for(let othersel of document.querySelectorAll(".file-item-selected")) {
+							othersel.classList.remove("file-item-selected");
+						}
+						fileelem.classList.add("file-item-selected");
+						set_sblk2(part_blob);
+					
+
+					} else if(infile_array[0x818] == 0x53 && infile_array[0x819] == 0x42 && infile_array[0x81A] == 0x6C && infile_array[0x81B] == 0x6B) {
+						fileelem.textContent = index_string+"Jak 1: " + infile.name + " (" + (infile_array[0x82E] + (infile_array[0x82F] * 256)) + " sounds)";
+						let part_blob = infile.slice(0x800).slice(this_sectors[i]*2048, (this_sectors[i]+this_sizes[i])*2048);
+						fileelem.classList.add("file-item");
+						fileelem.addEventListener("click", (e) => {
+							for(let othersel of document.querySelectorAll(".file-item-selected")) {
+								othersel.classList.remove("file-item-selected");
+							}
+							fileelem.classList.add("file-item-selected");
+							set_sblk1(part_blob);
+						
 						});
 
 						for(let othersel of document.querySelectorAll(".file-item-selected")) {
@@ -584,9 +645,8 @@ async function load_gamefile() {
 							othersel.classList.remove("file-item-selected");
 						}
 						fileelem.classList.add("file-item-selected");
-						console.log(part_blob)
-						console.log(infile.name)
 						set_sbv2(part_blob, infile.name);
+
 
 					} else if(part_header[0] == 0x56 && part_header[1] == 0x41 && part_header[2] == 0x47 && part_header[3] == 0x70) {
 						let title = "";
@@ -2257,6 +2317,7 @@ Sample rate: ${sample_rate} Hz`;
 }
 
 async function set_sblk1(blob) {
+	do_log("Using demo sectors");
 	if(dispose_old) {
 		dispose_old();
 		dispose_old = null;
@@ -2340,6 +2401,7 @@ async function set_sblk2(blob) {
 		dispose_old();
 		dispose_old = null;
 	}
+	do_log("Using demo sectors");
 
 	let file = new Uint8Array(await new Response(blob).arrayBuffer());
 
